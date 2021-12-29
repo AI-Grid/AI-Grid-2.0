@@ -340,7 +340,9 @@ namespace OpenSim.Services.UserAccountService
             if (!string.IsNullOrEmpty(data.UserCountry))
                 d.Data["UserCountry"] = data.UserCountry;
 			d.Data["DisplayName"] = data.DisplayName;
-			d.Data["NameChanged"] = data.NameChanged.ToString();
+            m_log.InfoFormat("STORE DISPLAY NAME: {0}",data.DisplayName);
+			
+            d.Data["NameChanged"] = data.NameChanged.ToString();
 			d.Data["TOSDate"] = data.TOSDate.ToString();
 			
             List<string> parts = new List<string>();
@@ -1126,7 +1128,28 @@ namespace OpenSim.Services.UserAccountService
 
         public bool SetDisplayName(UUID userID, string displayName)
         {
-            throw new NotImplementedException();
+            UserAccount account = GetUserAccount(UUID.Zero, userID);
+
+            if (account == null)
+            {
+                MainConsole.Instance.Output("No such user found!");
+                return false;
+            }
+
+            bool success = false;
+
+            account.DisplayName = displayName;
+
+            success = StoreUserAccount(account);
+            if (!success)
+            {
+                MainConsole.Instance.Output("Unable to set display name for this account.");
+                return false;
+            }
+            else
+                MainConsole.Instance.Output("User display name set for user {0} {1} to {2}", account.FirstName, account.LastName, account.DisplayName);
+
+            return true;
         }
     }
 }

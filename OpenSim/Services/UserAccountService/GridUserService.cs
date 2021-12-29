@@ -363,7 +363,7 @@ namespace OpenSim.Services.UserAccountService
                 // Wait for all the tasks to finish
                 Task.WaitAll(tasks.ToArray());
 
-                //m_log.InfoFormat("Fetched {0} display names from {1} grids", results.Count, grids_and_infos.Count);
+                m_log.InfoFormat("Fetched {0} display names from {1} grids", results.Count, grids_and_infos.Count);
 
                 // Go through the original entries and update their values and store it
                 foreach(GridUserInfo info in entries)
@@ -372,12 +372,12 @@ namespace OpenSim.Services.UserAccountService
                     {
                         info.DisplayName = results[info.UserID];
                         info.NameCached = DateTime.UtcNow;
-                        //m_log.InfoFormat("Updating display name of {0} to {1}", info.UserID, results[info.UserID]);
+                        m_log.InfoFormat("Updating display name of {0} to {1}", info.UserID, results[info.UserID]);
                         SetDisplayName(info.UserID, info.DisplayName);
                     }
                     else
                     {
-                        //m_log.InfoFormat("No data received for {0}", info.UserID);
+                        m_log.InfoFormat("No data received for {0}", info.UserID);
                         SetDisplayName(info.UserID, info.DisplayName);
                     }
                 }
@@ -477,7 +477,7 @@ namespace OpenSim.Services.UserAccountService
         
 		public bool SetDisplayName(string userID, string displayName)
         {
-//            m_log.InfoFormat("[GRID USER SERVICE]: SetDisplayName for {0} to {1}", userID, displayName);
+            m_log.InfoFormat("[GRID USER SERVICE]: SetDisplayName for {0} to {1}", userID, displayName);
 
             GridUserData d = GetGridUserData(userID);
 
